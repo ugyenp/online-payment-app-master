@@ -17,6 +17,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { TestComponent } from './test/test.component';
 import { DrivinglicenseComponent } from './drivinglicense/drivinglicense.component';
+import { VehicleComponent } from './vehicle/vehicle.component';
+import { LearnerlicenseComponent } from './learnerlicense/learnerlicense.component';
+import { OffenceComponent } from './offence/offence.component';
 
 
 @NgModule({
@@ -28,6 +31,9 @@ import { DrivinglicenseComponent } from './drivinglicense/drivinglicense.compone
     PopUpComponent,
     TestComponent,
     DrivinglicenseComponent,
+    VehicleComponent,
+    LearnerlicenseComponent,
+    OffenceComponent,
 
   ],
   imports: [

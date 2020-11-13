@@ -8,11 +8,12 @@ import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
+  selector: 'app-vehicle',
+  templateUrl: './vehicle.component.html',
+  styleUrls: ['./vehicle.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class VehicleComponent implements OnInit {
+
   isSearchSubmitted = false;
   searchForm: FormGroup;
 
@@ -93,6 +94,7 @@ export class DashboardComponent implements OnInit {
       vehicleTypeUser: ['', [Validators.required]]
     });
   }
+
 
   //Error controller funct5ion
   get errorControl() {
@@ -255,19 +257,4 @@ export class DashboardComponent implements OnInit {
       this.food_from_modal = result.food;
     });
   }
-
-  //Proceed payment
-  // proceedPayment() {
-  //   this.applicationModel.customer_Id = this.customerId;
-  //   this.applicationModel.application_Type = this.application_Type;
-  //   this.applicationModel.amount = this.totalAmount;
-  //   this.applicationModel.renewal_Amount = this.amount;
-  //   this.applicationModel.renewal_Duration = this.userSelectedRenewalDuration;
-  //   this.applicationModel.submitTo = this.rstaUserSelectedLocation;
-  //   this.applicationModel.vehicle_Id = this.vehicleRegistrationId
-  //   this.apiService.proccedpayment(this.applicationModel, this.application_Type, this.service_Type).subscribe((response) => {
-
-  //   });
-  // }
-
 }

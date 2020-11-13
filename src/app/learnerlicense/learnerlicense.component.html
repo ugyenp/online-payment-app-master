@@ -15,10 +15,10 @@
                         <div class="col-lg-4 ">
                             <div class="form-group bmd-form-group">
                                 <select [(ngModel)]="selectedDetails"
-                                    (change)="drivingLicenseDetailsSearch(selectedDetails)" class="form-control">
+                                    (change)="searchLearnerLicenseDetails(selectedDetails)" class="form-control">
                                     <option [ngValue]="selected">Search by</option>
                                     <option value="1">Cid Number</option>
-                                    <option value="2">Driving License Number</option>
+                                    <option value="2">Learner License Number</option>
                                 </select>
                             </div>
                         </div>
@@ -37,22 +37,22 @@
                         </div>
                     </div>
 
-                    <div *ngIf="showLicenseNoForm" class="ml-auto row">
-                        <div class="col-lg-2 offset-lg-2"><label class="text-dark">Driving License Number</label>
+                    <div *ngIf="showLearnerLicenseNoForm" class="ml-auto row">
+                        <div class="col-lg-2 offset-lg-2"><label class="text-dark">Learner License Number</label>
                         </div>
                         <div class="col-lg-4 text-center">
                             <div class="form-group bmd-form-group">
-                                <select class="form-control">
-                                    <option [ngValue]="selected"> Select Prefix</option>
-                                    <option value="T">T</option>
-                                    <option value="P">P</option>
-                                    <option value="G">G</option>
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="PD">PD</option>
-                                </select>
+                                <select [(ngModel)]="ll_initial" class="form-control border-primary">
+                                    <option [ngValue]="selected">Select Prefix</option>
+                                    <option value="T">T/LL</option>
+                                    <option value="P">P/LL</option>
+                                    <option value="G">G/LL</option>
+                                    <option value="S">S/LL</option>
+                                    <option value="M">M/LL</option>
+                                    <option value="PD">PD/LL</option>
+                                  </select>
                             </div>
-                            <input placeholder="Driving License Number" (keypress)="keyPressNumbers($event)" type="text" class="form-control">
+                            <input placeholder="Learner License Number" (keypress)="keyPressNumbers($event)" type="text" class="form-control">
                         </div>
                         <div class="col-lg-1">
                             <button class="btn btn-primary btn-tips">?
@@ -73,10 +73,10 @@
         </div>
 
         <!-- driving license renewal form -->
-        <div class="row" *ngIf="showDrivingLicenseRenewal">
+        <div class="row" *ngIf="showLearnerLicenseRenewal">
             <div class="card col-lg-7 mr-auto">
                 <div class="card-header card-header-primary p-1">
-                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Driving License Details</h4>
+                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Learner License Details</h4>
                 </div>
                 <div class="col-md-12">
                     <div class="places-buttons">
@@ -208,7 +208,7 @@
         </div>
 
          <!-- driving license replacement form form -->
-         <div class="row" *ngIf="showDrivingLicenseReplacement">
+         <div class="row" *ngIf="showLearnerLicenseReplacement">
             <div class="card col-lg-7 mr-auto">
                 <div class="card-header card-header-primary p-1">
                     <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Driving License Details</h4>

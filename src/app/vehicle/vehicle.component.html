@@ -10,95 +10,85 @@
             </div>
             <div class="col-md-12">
                 <div class="places-buttons">
-                    <div class="ml-auto row">
-                        <div class="col-lg-2 offset-lg-2"><label class="text-dark">Search By</label></div>
-                        <div class="col-lg-4 ">
-                            <div class="form-group bmd-form-group">
-                                <select [(ngModel)]="selectedDetails"
-                                    (change)="drivingLicenseDetailsSearch(selectedDetails)" class="form-control">
-                                    <option [ngValue]="selected">Search by</option>
-                                    <option value="1">Cid Number</option>
-                                    <option value="2">Driving License Number</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div *ngIf="showCidForm" class="ml-auto row">
-                        <div class="col-lg-2 offset-lg-2"><label class="text-dark">Cid Number</label></div>
-                        <div class="col-lg-4 text-center">
-                            <div class="form-group bmd-form-group">
-                                <input maxlength="11" (keypress)="keyPressNumbers($event)" placeholder="CID Number" type="text" class="form-control">
-                            </div>
-                        </div>
-                        <div class="col-lg-1">
-                            <button class="btn btn-primary btn-tips">?
-                                <div class="ripple-container"></div></button>
-                        </div>
-                    </div>
-
-                    <div *ngIf="showLicenseNoForm" class="ml-auto row">
-                        <div class="col-lg-2 offset-lg-2"><label class="text-dark">Driving License Number</label>
-                        </div>
-                        <div class="col-lg-4 text-center">
-                            <div class="form-group bmd-form-group">
-                                <select class="form-control">
-                                    <option [ngValue]="selected"> Select Prefix</option>
-                                    <option value="T">T</option>
-                                    <option value="P">P</option>
-                                    <option value="G">G</option>
-                                    <option value="S">S</option>
-                                    <option value="M">M</option>
-                                    <option value="PD">PD</option>
-                                </select>
-                            </div>
-                            <input placeholder="Driving License Number" (keypress)="keyPressNumbers($event)" type="text" class="form-control">
-                        </div>
-                        <div class="col-lg-1">
-                            <button class="btn btn-primary btn-tips">?
-                                <div class="ripple-container"></div></button>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-2 col-sm-7 offset-3 offset-lg-4">
-                            <button class="btn btn-block btn-primary" type="submit">Search<div class="ripple-container">
+                    <form [formGroup]="searchForm" (ngSubmit)="searchDetails(vehicleTypeUser,vehicleNumber)">
+                        <div class="ml-auto row">
+                            <div class="col-lg-2 offset-lg-2"><label class="text-dark">Vehicle Number</label></div>
+                            <div class="col-lg-4 ">
+                                <div class="form-group bmd-form-group">
+                                    <!-- <label class="bmd-label-floating">Eg. BP-1-A1234</label> -->
+                                    <input formControlName="vehicleNumber" [(ngModel)]="vehicleNumber"
+                                        placeholder="Eg. BP-1-A1234" type="text" class="form-control">
+                                    <p id="warning"
+                                        *ngIf="isSearchSubmitted && errorControl.vehicleTypeUser.errors?.required">
+                                        Vehicle number is required
+                                    </p>
                                 </div>
-                                <div class="ripple-container"></div>
-                            </button>
+                            </div>
+
+                            <div class="col-lg-1">
+                                <button class="btn btn-primary btn-tips"
+                                    onclick="md.showNotification('bottom','right')">?
+                                    <div class="ripple-container"></div></button>
+                            </div>
                         </div>
-                    </div>
+                        <div class="ml-auto row">
+                            <div class="col-lg-2 offset-lg-2"><label class="text-dark">Vehicle Type</label></div>
+                            <div class="col-lg-4 text-center">
+                                <div class="form-group bmd-form-group">
+                                    <select formControlName="vehicleTypeUser" [(ngModel)]="vehicleTypeUser"
+                                        class="form-control">
+                                        <option [ngValue]="selected">Select vehicle Type </option>
+                                        <option *ngFor="let v of vehicleType;" value="{{v.vehicle_Type_Id}}">
+                                            {{v.vehicle_Type_Name}}</option>
+                                    </select>
+                                    <p id="warning"
+                                        *ngIf="isSearchSubmitted && errorControl.vehicleNumber.errors?.required">
+                                        Vehicle type is required
+                                    </p>
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-1">
+                                <button class="btn btn-primary btn-tips">?
+                                    <div class="ripple-container"></div></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-sm-7 offset-3 offset-lg-4">
+                                <button class="btn btn-block btn-primary" type="submit">Search<div
+                                        class="ripple-container"></div>
+                                    <div class="ripple-container"></div>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
 
-        <!-- driving license renewal form -->
-        <div class="row" *ngIf="showDrivingLicenseRenewal">
+        <!-- Vehicle renewal form -->
+        <div class="row" *ngIf="showVehicleRenewalForm">
             <div class="card col-lg-7 mr-auto">
                 <div class="card-header card-header-primary p-1">
-                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Driving License Details</h4>
+                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Vehicle Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <div class="places-buttons">
 
                         <div class="mb-3 ml-auto row">
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">License Number:</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
-                            </div>
-
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Customer Name:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
+                                <label class="text-dark"> {{firstName}} {{middleName}} {{lastname}}</label>
                             </div>
-                        </div>
-
-                        <div class="mb-3 ml-auto row">
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Expiry Date:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"></label>
+                                <label class="text-dark">{{expiryDate | date}}</label>
                             </div>
                         </div>
 
@@ -109,6 +99,8 @@
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <select [(ngModel)]="userSelectedRenewalDuration" class="form-control">
                                     <option [ngValue]="selected">Select Renewal Duration</option>
+                                    <option *ngFor="let vr of renewaaldetails;" value="{{vr.renewal_Duration_Month}}">
+                                        {{vr.renewal_Duration_Desc}}</option>
                                 </select>
                             </div>
 
@@ -116,6 +108,12 @@
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <select class="form-control" [(ngModel)]="rstaUserSelectedLocation">
                                     <option [ngValue]="selected">Select Submit To</option>
+                                    <option value="1_{{rlocation.region_id}}"
+                                        *ngFor="let rlocation of rstaregionlocation;">{{rlocation.region_name}}
+                                    </option>
+                                    <option value="2_{{location.base_office_id}}"
+                                        *ngFor="let location of rstabaseLocation;">{{location.base_office_name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -123,6 +121,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="card col-lg-4">
                 <div class="card-header card-header-primary p-1">
@@ -158,10 +157,10 @@
                                                     1
                                                 </td>
                                                 <td>
-                                                     Amount
+                                                   Replacement Amount
                                                 </td>
                                                 <td class="text-primary">
-                                                    Nu. 
+                                                    Nu. {{amount}}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -172,7 +171,7 @@
                                                     Penalty
                                                 </td>
                                                 <td class="text-primary">
-                                                    Nu.
+                                                    Nu. {{penaltyAmount}}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -183,7 +182,7 @@
                                                     <b>Total Amount</b>
                                                 </td>
                                                 <td class="text-primary">
-                                                    <b>Nu. </b>
+                                                    <b>Nu. {{totalAmount}}</b>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -198,7 +197,7 @@
                                     (click)="makePayment(rstaUserSelectedLocation,userSelectedRenewalDuration)"
                                     class="btn btn-primary btn-block">Make
                                     Payment</button>
-                                <p id="warning"></p>
+                                <p id="warning">{{msg}}</p>
                             </div>
                         </div>
                     </div>
@@ -207,50 +206,42 @@
             </div>
         </div>
 
-         <!-- driving license replacement form form -->
-         <div class="row" *ngIf="showDrivingLicenseReplacement">
+         <!-- Vehicle replacement form form -->
+        <div class="row" *ngIf="showVehicleReplacementForm">
             <div class="card col-lg-7 mr-auto">
                 <div class="card-header card-header-primary p-1">
-                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Driving License Details</h4>
+                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Owner Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <div class="places-buttons">
 
                         <div class="mb-3 ml-auto row">
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">License Number:</label>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Owner Type:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
+                                <label class="text-dark"> {{vehicleRregistrationType}}</label>
                             </div>
-
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Customer Name:</label>
-                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Owner Name:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
+                                <label class="text-dark">{{firstName}} {{middleName}} {{lastname}}</label>
                             </div>
                         </div>
 
                         <div class="mb-3 ml-auto row">
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Expiry Date:</label></div>
-                            <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"></label>
-                            </div>
-                        </div>
-
-                        <div class="mb-3 ml-auto row">
-
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Renewal Duration:</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6">
-                                <select [(ngModel)]="userSelectedRenewalDuration" class="form-control">
-                                    <option [ngValue]="selected">Select Renewal Duration</option>
-                                </select>
-                            </div>
-
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Submit To:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <select class="form-control" [(ngModel)]="rstaUserSelectedLocation">
                                     <option [ngValue]="selected">Select Submit To</option>
+                                    <option value="1_{{rlocation.region_id}}"
+                                        *ngFor="let rlocation of rstaregionlocation;">{{rlocation.region_name}}
+                                    </option>
+                                    <option value="2_{{location.base_office_id}}"
+                                        *ngFor="let location of rstabaseLocation;">{{location.base_office_name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -258,6 +249,7 @@
                     </div>
                 </div>
             </div>
+
 
             <div class="card col-lg-4">
                 <div class="card-header card-header-primary p-1">
@@ -293,13 +285,13 @@
                                                     1
                                                 </td>
                                                 <td>
-                                                     Amount
+                                                    RC Replacement
                                                 </td>
                                                 <td class="text-primary">
-                                                    Nu. 
+                                                    Nu. {{rcAmount}}
                                                 </td>
                                             </tr>
-                                          
+                                           
                                             <tr>
                                                 <td>
 
@@ -308,7 +300,7 @@
                                                     <b>Total Amount</b>
                                                 </td>
                                                 <td class="text-primary">
-                                                    <b>Nu. </b>
+                                                    <b>Nu. {{rcAmount}}</b>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -323,7 +315,7 @@
                                     (click)="makePayment(rstaUserSelectedLocation,userSelectedRenewalDuration)"
                                     class="btn btn-primary btn-block">Make
                                     Payment</button>
-                                <p id="warning"></p>
+                                <p id="warning">{{msg}}</p>
                             </div>
                         </div>
                     </div>
@@ -331,6 +323,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
