@@ -10,59 +10,73 @@
             </div>
             <div class="col-md-12">
                 <div class="places-buttons">
-                    <form [formGroup]="searchForm" (ngSubmit)="searchDetails(vehicleTypeUser,vehicleNumber)">
-                        <div class="ml-auto row">
-                            <div class="col-lg-2 offset-lg-2"><label class="text-dark">Vehicle Number</label></div>
-                            <div class="col-lg-4 ">
-                                <div class="form-group bmd-form-group">
-                                    <!-- <label class="bmd-label-floating">Eg. BP-1-A1234</label> -->
-                                    <input formControlName="vehicleNumber" [(ngModel)]="vehicleNumber"
-                                        placeholder="Eg. BP-1-A1234" type="text" class="form-control">
-                                    <p id="warning"
-                                        *ngIf="isSearchSubmitted && errorControl.vehicleTypeUser.errors?.required">
-                                        Vehicle number is required
-                                    </p>
+                    <div class="ml-auto row">
+                        <div class="col-lg-2 offset-lg-2"><label class="text-dark">Vehicle Number: *</label>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="input-group form-group bmd-form-group">
+                                <select [(ngModel)]="vf_initial" class="form-control col-sm-2">
+                                    <option [ngValue]="selected">Select</option>
+                                    <option value="BP">BP</option>
+                                    <option value="BG">BG</option>
+                                    <option value="BG">BT</option>
+                                </select>
+                                <div class="col-sm-1">
+                                    <p style="text-align: center;">-</p>
                                 </div>
-                            </div>
-
-                            <div class="col-lg-1">
-                                <button class="btn btn-primary btn-tips"
-                                    onclick="md.showNotification('bottom','right')">?
-                                    <div class="ripple-container"></div></button>
-                            </div>
-                        </div>
-                        <div class="ml-auto row">
-                            <div class="col-lg-2 offset-lg-2"><label class="text-dark">Vehicle Type</label></div>
-                            <div class="col-lg-4 text-center">
-                                <div class="form-group bmd-form-group">
-                                    <select formControlName="vehicleTypeUser" [(ngModel)]="vehicleTypeUser"
-                                        class="form-control">
-                                        <option [ngValue]="selected">Select vehicle Type </option>
-                                        <option *ngFor="let v of vehicleType;" value="{{v.vehicle_Type_Id}}">
-                                            {{v.vehicle_Type_Name}}</option>
-                                    </select>
-                                    <p id="warning"
-                                        *ngIf="isSearchSubmitted && errorControl.vehicleNumber.errors?.required">
-                                        Vehicle type is required
-                                    </p>
+                                <select [(ngModel)]="vm_initial" class="form-control col-sm-2">
+                                    <option [ngValue]="selected">Select</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                </select>
+                                <div class="col-sm-1">
+                                    <p style="text-align: center;">-</p>
                                 </div>
-                            </div>
+                                <select [(ngModel)]="vl_initial" class="form-control col-sm-2">
+                                    <option [ngValue]="selected">Select</option>
+                                    <option value=" "> </option>
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                    <option value="E">E</option>
+                                    <option value="F">F</option>
+                                    <option value="G">G</option>
+                                </select>
 
-
-                            <div class="col-lg-1">
-                                <button class="btn btn-primary btn-tips">?
-                                    <div class="ripple-container"></div></button>
+                                <input style="height: 41px;" [(ngModel)]="vl_number" class="form-control"
+                                    placeholder="Vehicle Number" type="text">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-lg-2 col-sm-7 offset-3 offset-lg-4">
-                                <button class="btn btn-block btn-primary" type="submit">Search<div
-                                        class="ripple-container"></div>
-                                    <div class="ripple-container"></div>
-                                </button>
+                    </div>
+
+                    <div class="ml-auto row">
+                        <div class="col-lg-2 offset-lg-2"><label class="text-dark">Vehicle Type: *</label></div>
+                        <div class="col-lg-4 ">
+                            <div class="form-group bmd-form-group">
+                                <select class="form-control" [(ngModel)]="vehicle_type_id">
+                                    <option [ngValue]="selected">--Select--</option>
+                                    <option *ngFor="let vt of vehicleTypeResponse;" value="{{vt.vehicle_Type_Id}}">
+                                        {{vt.vehicle_Type_Name}}</option>
+                                </select>
                             </div>
+                            <p style="color: red;">{{serverError}}</p>
+                            <p style="color: red;">{{errorMsg}}</p>
                         </div>
-                    </form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-2 col-sm-7 offset-3 offset-lg-4">
+                            <button (click)="vehicleDetails()" class="btn btn-block btn-primary" type="submit">Search
+                                <div class="ripple-container">
+                                </div>
+                                <div class="ripple-container"></div>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,30 +108,30 @@
 
                         <div class="mb-3 ml-auto row">
 
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Renewal Duration:</label>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Renewal Duration: *</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <select [(ngModel)]="userSelectedRenewalDuration" class="form-control">
+                                <select (change)="selectedRenewalDuration(renewalDuration)" [(ngModel)]="renewalDuration" class="form-control">
                                     <option [ngValue]="selected">Select Renewal Duration</option>
-                                    <option *ngFor="let vr of renewaaldetails;" value="{{vr.renewal_Duration_Month}}">
+                                    <option *ngFor="let vr of renewalDurationResponse;"
+                                        value="{{vr.renewal_Duration_Month}}">
                                         {{vr.renewal_Duration_Desc}}</option>
                                 </select>
                             </div>
 
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Submit To:</label></div>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Submit To:* </label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <select class="form-control" [(ngModel)]="rstaUserSelectedLocation">
+                                <select class="form-control" [(ngModel)]="jusris_type_and_id">
                                     <option [ngValue]="selected">Select Submit To</option>
-                                    <option value="1_{{rlocation.region_id}}"
-                                        *ngFor="let rlocation of rstaregionlocation;">{{rlocation.region_name}}
+                                    <option value="1-{{region.region_id}}" *ngFor="let region of regionResponse;">
+                                        {{region.region_name}}
                                     </option>
-                                    <option value="2_{{location.base_office_id}}"
-                                        *ngFor="let location of rstabaseLocation;">{{location.base_office_name}}
+                                    <option value="2-{{base.base_office_id}}" *ngFor="let base of baseResponse;">
+                                        {{base.base_office_name}}
                                     </option>
                                 </select>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -143,7 +157,7 @@
                                                     Sl#
                                                 </th>
                                                 <th>
-                                                    Order Details
+                                                    Details
                                                 </th>
                                                 <th>
                                                     Amount
@@ -157,7 +171,7 @@
                                                     1
                                                 </td>
                                                 <td>
-                                                   Replacement Amount
+                                                     Amount
                                                 </td>
                                                 <td class="text-primary">
                                                     Nu. {{amount}}
@@ -194,7 +208,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <button mat-raised-button
-                                    (click)="makePayment(rstaUserSelectedLocation,userSelectedRenewalDuration)"
+                                (click)="makePayment('Vehicle Renewal')"
                                     class="btn btn-primary btn-block">Make
                                     Payment</button>
                                 <p id="warning">{{msg}}</p>
@@ -206,7 +220,7 @@
             </div>
         </div>
 
-         <!-- Vehicle replacement form form -->
+        <!-- Vehicle replacement form form -->
         <div class="row" *ngIf="showVehicleReplacementForm">
             <div class="card col-lg-7 mr-auto">
                 <div class="card-header card-header-primary p-1">
@@ -220,32 +234,31 @@
                     <div class="places-buttons">
 
                         <div class="mb-3 ml-auto row">
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Owner Type:</label>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Customer Name:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> {{vehicleRregistrationType}}</label>
+                                <label class="text-dark"> {{firstName}} {{middleName}} {{lastname}}</label>
                             </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Owner Name:</label></div>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Expiry Date:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark">{{firstName}} {{middleName}} {{lastname}}</label>
+                                <label class="text-dark">{{expiryDate | date}}</label>
                             </div>
                         </div>
 
                         <div class="mb-3 ml-auto row">
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Submit To:</label></div>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Submit To:*</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <select class="form-control" [(ngModel)]="rstaUserSelectedLocation">
+                                <select class="form-control" [(ngModel)]="jusris_type_and_id">
                                     <option [ngValue]="selected">Select Submit To</option>
-                                    <option value="1_{{rlocation.region_id}}"
-                                        *ngFor="let rlocation of rstaregionlocation;">{{rlocation.region_name}}
+                                    <option value="1-{{region.region_id}}" *ngFor="let region of regionResponse;">
+                                        {{region.region_name}}
                                     </option>
-                                    <option value="2_{{location.base_office_id}}"
-                                        *ngFor="let location of rstabaseLocation;">{{location.base_office_name}}
+                                    <option value="2-{{base.base_office_id}}" *ngFor="let base of baseResponse;">
+                                        {{base.base_office_name}}
                                     </option>
                                 </select>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -271,7 +284,7 @@
                                                     Sl#
                                                 </th>
                                                 <th>
-                                                    Order Details
+                                                    Details
                                                 </th>
                                                 <th>
                                                     Amount
@@ -288,10 +301,10 @@
                                                     RC Replacement
                                                 </td>
                                                 <td class="text-primary">
-                                                    Nu. {{rcAmount}}
+                                                    Nu. {{amount}}
                                                 </td>
                                             </tr>
-                                           
+
                                             <tr>
                                                 <td>
 
@@ -300,7 +313,7 @@
                                                     <b>Total Amount</b>
                                                 </td>
                                                 <td class="text-primary">
-                                                    <b>Nu. {{rcAmount}}</b>
+                                                    <b>Nu. {{totalAmount}}</b>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -312,7 +325,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <button mat-raised-button
-                                    (click)="makePayment(rstaUserSelectedLocation,userSelectedRenewalDuration)"
+                                    (click)="makePayment('Vehicle Replacement')"
                                     class="btn btn-primary btn-block">Make
                                     Payment</button>
                                 <p id="warning">{{msg}}</p>

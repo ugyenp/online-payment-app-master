@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./offence.component.css']
 })
 export class OffenceComponent implements OnInit {
+  selected:any;
+  vf_initial:string;
+  vm_initial:string;
+  vl_initial:string;
+  
 
   constructor() { }
 

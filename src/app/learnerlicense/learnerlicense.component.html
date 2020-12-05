@@ -14,8 +14,8 @@
                         <div class="col-lg-2 offset-lg-2"><label class="text-dark">Search By</label></div>
                         <div class="col-lg-4 ">
                             <div class="form-group bmd-form-group">
-                                <select [(ngModel)]="selectedDetails"
-                                    (change)="searchLearnerLicenseDetails(selectedDetails)" class="form-control">
+                                <select [(ngModel)]="selectedDetails" (change)="selectedForm(selectedDetails)"
+                                    class="form-control">
                                     <option [ngValue]="selected">Search by</option>
                                     <option value="1">Cid Number</option>
                                     <option value="2">Learner License Number</option>
@@ -28,7 +28,8 @@
                         <div class="col-lg-2 offset-lg-2"><label class="text-dark">Cid Number</label></div>
                         <div class="col-lg-4 text-center">
                             <div class="form-group bmd-form-group">
-                                <input maxlength="11" (keypress)="keyPressNumbers($event)" placeholder="CID Number" type="text" class="form-control">
+                                <input maxlength="11" (keypress)="keyPressNumbers($event)" placeholder="CID Number"
+                                    [(ngModel)]="cidNumber" type="text" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-1">
@@ -41,8 +42,8 @@
                         <div class="col-lg-2 offset-lg-2"><label class="text-dark">Learner License Number</label>
                         </div>
                         <div class="col-lg-4 text-center">
-                            <div class="form-group bmd-form-group">
-                                <select [(ngModel)]="ll_initial" class="form-control border-primary">
+                            <div class="input-group form-group bmd-form-group">
+                                <select [(ngModel)]="ll_initial" class="form-control col-sm-2">
                                     <option [ngValue]="selected">Select Prefix</option>
                                     <option value="T">T/LL</option>
                                     <option value="P">P/LL</option>
@@ -50,19 +51,22 @@
                                     <option value="S">S/LL</option>
                                     <option value="M">M/LL</option>
                                     <option value="PD">PD/LL</option>
-                                  </select>
+                                </select>
+
+                                <div class="col-sm-1">
+                                    <p style="text-align: center;">-</p>
+                                </div>
+
+                                <input [(ngModel)]="ll_number" placeholder="Learner License Number"
+                                    (keypress)="keyPressNumbers($event)" type="text" class="form-control">
                             </div>
-                            <input placeholder="Learner License Number" (keypress)="keyPressNumbers($event)" type="text" class="form-control">
-                        </div>
-                        <div class="col-lg-1">
-                            <button class="btn btn-primary btn-tips">?
-                                <div class="ripple-container"></div></button>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-lg-2 col-sm-7 offset-3 offset-lg-4">
-                            <button class="btn btn-block btn-primary" type="submit">Search<div class="ripple-container">
+                            <button (click)="learnerLicenseDetails()" class="btn btn-block btn-primary"
+                                type="submit">Search<div class="ripple-container">
                                 </div>
                                 <div class="ripple-container"></div>
                             </button>
@@ -82,23 +86,24 @@
                     <div class="places-buttons">
 
                         <div class="mb-3 ml-auto row">
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">License Number:</label>
+                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Learner License
+                                    Number:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
+                                <label class="text-dark"> {{learnerLicenseNumber}}</label>
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Customer Name:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
+                                <label class="text-dark"> {{firstName}} {{middleName}} {{lastName}}</label>
                             </div>
                         </div>
 
                         <div class="mb-3 ml-auto row">
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Expiry Date:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"></label>
+                                <label class="text-dark">{{expiryDate}}</label>
                             </div>
                         </div>
 
@@ -107,15 +112,22 @@
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Renewal Duration:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <select [(ngModel)]="userSelectedRenewalDuration" class="form-control">
+                                <select [(ngModel)]="renewalDuration" (change)="renewalAmount(renewalDuration)" class="form-control">
                                     <option [ngValue]="selected">Select Renewal Duration</option>
+                                    <option *ngFor="let rd of learnerRenewalDurationYears;" value="{{rd.year}}">{{rd.year}} years</option>
                                 </select>
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Submit To:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <select class="form-control" [(ngModel)]="rstaUserSelectedLocation">
+                                <select class="form-control" [(ngModel)]="jusris_type_and_id">
                                     <option [ngValue]="selected">Select Submit To</option>
+                                    <option value="1-{{region.region_id}}" *ngFor="let region of regionResponse;">
+                                        {{region.region_name}}
+                                    </option>
+                                    <option value="2-{{base.base_office_id}}" *ngFor="let base of baseResponse;">
+                                        {{base.base_office_name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -158,23 +170,13 @@
                                                     1
                                                 </td>
                                                 <td>
-                                                     Amount
+                                                    Amount
                                                 </td>
                                                 <td class="text-primary">
-                                                    Nu. 
+                                                    Nu. {{amount}}
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td>
-                                                    2
-                                                </td>
-                                                <td>
-                                                    Penalty
-                                                </td>
-                                                <td class="text-primary">
-                                                    Nu.
-                                                </td>
-                                            </tr>
+
                                             <tr>
                                                 <td>
 
@@ -183,7 +185,7 @@
                                                     <b>Total Amount</b>
                                                 </td>
                                                 <td class="text-primary">
-                                                    <b>Nu. </b>
+                                                    <b>Nu. {{totalAmount}}</b>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -195,7 +197,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <button mat-raised-button
-                                    (click)="makePayment(rstaUserSelectedLocation,userSelectedRenewalDuration)"
+                                    (click)="makePayment('Learner License Renewal')"
                                     class="btn btn-primary btn-block">Make
                                     Payment</button>
                                 <p id="warning"></p>
@@ -206,12 +208,12 @@
                 </div>
             </div>
         </div>
-
-         <!-- driving license replacement form form -->
-         <div class="row" *ngIf="showLearnerLicenseReplacement">
+        
+        <!-- learner license replacement form form -->
+        <div class="row" *ngIf="showLearnerLicenseReplacement">
             <div class="card col-lg-7 mr-auto">
                 <div class="card-header card-header-primary p-1">
-                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Driving License Details</h4>
+                    <h4 class="card-title"><i class="material-icons mr-1">directions_car</i>Learner License Details</h4>
                 </div>
                 <div class="col-md-12">
                     <div class="places-buttons">
@@ -220,37 +222,34 @@
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">License Number:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
+                                <label class="text-dark">{{learnerLicenseNumber}}</label>
                             </div>
 
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Customer Name:</label>
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"> </label>
+                                <label class="text-dark">  {{firstName}} {{middleName}} {{lastName}} </label>
                             </div>
                         </div>
 
                         <div class="mb-3 ml-auto row">
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Expiry Date:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
-                                <label class="text-dark"></label>
+                                <label class="text-dark">{{expiryDate}}</label>
                             </div>
                         </div>
 
                         <div class="mb-3 ml-auto row">
-
-                            <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Renewal Duration:</label>
-                            </div>
-                            <div class="col-lg-3 col-md-3 col-sm-6">
-                                <select [(ngModel)]="userSelectedRenewalDuration" class="form-control">
-                                    <option [ngValue]="selected">Select Renewal Duration</option>
-                                </select>
-                            </div>
-
                             <div class="col-lg-3 col-md-3 col-sm-6"><label class="text-dark">Submit To:</label></div>
                             <div class="col-lg-3 col-md-3 col-sm-6">
                                 <select class="form-control" [(ngModel)]="rstaUserSelectedLocation">
                                     <option [ngValue]="selected">Select Submit To</option>
+                                    <option value="1-{{region.region_id}}" *ngFor="let region of regionResponse;">
+                                        {{region.region_name}}
+                                    </option>
+                                    <option value="2-{{base.base_office_id}}" *ngFor="let base of baseResponse;">
+                                        {{base.base_office_name}}
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -279,7 +278,7 @@
                                                     Sl#
                                                 </th>
                                                 <th>
-                                                    Order Details
+                                                    Details
                                                 </th>
                                                 <th>
                                                     Amount
@@ -293,13 +292,13 @@
                                                     1
                                                 </td>
                                                 <td>
-                                                     Amount
+                                                    Amount
                                                 </td>
                                                 <td class="text-primary">
-                                                    Nu. 
+                                                    Nu. {{amount}}
                                                 </td>
                                             </tr>
-                                          
+
                                             <tr>
                                                 <td>
 
@@ -308,7 +307,7 @@
                                                     <b>Total Amount</b>
                                                 </td>
                                                 <td class="text-primary">
-                                                    <b>Nu. </b>
+                                                    <b>Nu. {{totalAmount}}</b>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -327,10 +326,8 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
     </div>
 </div>

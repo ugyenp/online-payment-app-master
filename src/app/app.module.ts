@@ -20,6 +20,7 @@ import { DrivinglicenseComponent } from './drivinglicense/drivinglicense.compone
 import { VehicleComponent } from './vehicle/vehicle.component';
 import { LearnerlicenseComponent } from './learnerlicense/learnerlicense.component';
 import { OffenceComponent } from './offence/offence.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import { OffenceComponent } from './offence/offence.component';
     VehicleComponent,
     LearnerlicenseComponent,
     OffenceComponent,
+    PagenotfoundComponent,
 
   ],
   imports: [

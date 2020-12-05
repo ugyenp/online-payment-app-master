@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { retry, catchError } from 'rxjs/operators';
-import { API_URL } from '../app.constant';
+import { API_URL, Online_Payment_API } from '../app.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -18,32 +18,18 @@ export class ApiService {
     })
   }
 
-  // Handle API errors
   handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error.message);
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
       console.error(
         `Backend returned code ${error.status}, ` +
         `body was: ${error.error}`);
     }
-    // return an observable with a user-facing error message
     return throwError(
       'Something bad happened; please try again later.');
   };
 
-  // Get vehicle type
-  getVehicleType(): Observable<any> {
-    return this.http
-      .get<any>(`${API_URL}` + "/vehicleType", this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      )
-  }
 
   // Get vehicle details
   getVehicleDetails(vehicleTypeId, vehicleNumber): Observable<any> {
@@ -55,35 +41,6 @@ export class ApiService {
       )
   }
 
-  //Get rsta base location
-  getRstabaseLocation(): Observable<any> {
-    return this.http
-      .get<any>(`${API_URL}` + "/baseOfficeDetail", this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      )
-  }
-
-  //Get rsta region location
-  getRstaRegionLocation(): Observable<any> {
-    return this.http
-      .get<any>(`${API_URL}` + "/regionDetails", this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      )
-  }
-
-  //get vehicle renewal duration
-  getRenewalDurationDetails(vehicleTypeId): Observable<any> {
-    return this.http
-      .get<any>(`${API_URL}` + "/renewalConstantDetail/vehicleTypeId=" + `${vehicleTypeId}`, this.httpOptions)
-      .pipe(
-        retry(2),
-        catchError(this.handleError)
-      )
-  }
 
   //get penalty constant
   getPenaltyAmount(Penalty_Id): Observable<any> {
@@ -98,7 +55,7 @@ export class ApiService {
   //Save application details
   proccedpayment(item, applicationType, serviceType, submittedTo): Observable<any> {
     return this.http
-      .post<any>(`${API_URL}` + "/vehicleApplication/" +`${applicationType}`+"/"+`${serviceType}` + "/" + `${submittedTo}`, JSON.stringify(item), this.httpOptions)
+      .post<any>(`${API_URL}` + "/vehicleApplication/" + `${applicationType}` + "/" + `${serviceType}` + "/" + `${submittedTo}`, JSON.stringify(item), this.httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError)
@@ -108,12 +65,138 @@ export class ApiService {
   //Get replacement amount
   getReplacementAmount(vehicleTypeId): Observable<any> {
     return this.http
-      .get<any>(`${API_URL}` + "/replacementAmount" + "/vehicleTypeId=" + `${vehicleTypeId}` , this.httpOptions)
+      .get<any>(`${API_URL}` + "/replacementAmount" + "/vehicleTypeId=" + `${vehicleTypeId}`, this.httpOptions)
       .pipe(
         retry(2),
         catchError(this.handleError)
       )
   }
 
+  //********************************From here new **************************
+  getVehicleType(): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/vehicleTypes", this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
 
+  vehicleRenewalDuration(vehicleTypeId): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/renewalDuration/" + `${vehicleTypeId}`, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  rstaBaseOffice(): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/baseOffices", this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  rstRregionalOffices(): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/regionalOffices", this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  vehicleDetails(vehicle_number, vehicle_type_id): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/vehicleDetails/" + `${vehicle_number}` + "/" + `${vehicle_type_id}`, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  drivingLicenseDetails(param_value, identity_type): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/drivingLicenseDetails/" + `${param_value}` + "/" + `${identity_type}`, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  learnerLicenseDetailsLLNumber(f_initial, ll_no): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/learnerLicenseDetailsLLNumber/" + `${f_initial}` + "/" +`${ll_no}`, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  learnerLicenseDetailsCidNumber(cid_number): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/learnerLicenseDetailsCidNumber/" + `${cid_number}`, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  amountDetails(url_param, identity_numbre): Observable<any> {
+    return this.http
+      .get<any>(`${API_URL}` + "/amount/"+ `${url_param}` +"/"+ `${identity_numbre}`, this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  makePayment(service_type, item): Observable<any> {
+    return this.http
+      .post<any>(`${API_URL}` + "/makePayment/" + `${service_type}`, JSON.stringify(item), this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  eralisPaymentVehicle(service_type, item): Observable<any> {
+    return this.http
+      .post<any>(`${Online_Payment_API}` + "/eralisPaymentVehicle/" + `${service_type}`, JSON.stringify(item), this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  eralisPaymentLicense(service_type, item): Observable<any> {
+    return this.http
+      .post<any>(`${Online_Payment_API}` + "/eralisPaymentLicense/" + `${service_type}`, JSON.stringify(item), this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  eralisPaymentLearnerLicense(service_type, item): Observable<any> {
+    return this.http
+      .post<any>(`${Online_Payment_API}` + "/eralisPaymentLearnerLicense/" + `${service_type}`, JSON.stringify(item), this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  getApplicationNumber(): Observable<any> {
+    return this.http
+      .get<any>(`${Online_Payment_API}` + "/getApplicationNumber", this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+  
 }
